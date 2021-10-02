@@ -3,6 +3,7 @@ import os
 from flask import Flask, jsonify
 from flask_pymongo import PyMongo
 
+max_result = 7
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 mongo = PyMongo(app)
@@ -11,9 +12,11 @@ houses_extra = {}
 with open('./houses.json') as jsonfile:
     houses_extra = json.load(jsonfile)
 
+
 def _get_history(house):
     cur = mongo.db.dollar.find({"house": house}, {
-        '_id': False, 'house': True, 'buy': True, 'sell': True, 'date': True}).sort('date', 1)
+        '_id': False, 'house': True, 'buy': True,
+        'sell': True, 'date': True}).sort('date', -1)
     result = []
     for row in cur:
         result.append({
@@ -26,7 +29,7 @@ def _get_history(house):
 @app.route("/v1/resume")
 def home():
     cur_last = mongo.db.dollar.find().sort(
-        [("date", -1)]).limit(5)
+        [("date", -1)]).limit(max_result)
     last = []
     for row in cur_last:
         last.append({
