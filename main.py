@@ -28,14 +28,14 @@ def _get_history(house):
 
 @app.route("/v1/resume")
 def home():
-    cur_last = mongo.db.dollar.find().sort(
-        [("date", -1)]).limit(max_result)
+    cur_last = mongo.db.resume.find().sort(
+        [("sell", 1)])
     last = []
     for row in cur_last:
         last.append({
             "tienda": row.get("house"),
-            "compra": float(row.get("buy")),
-            "venta": float(row.get("sell")),
+            "compra": row.get("buy"),
+            "venta": row.get("sell"),
             "fecha": row.get("date"),
             "url": houses_extra[row.get("house")]["url"],
             "image": houses_extra[row.get("house")]["image"]
