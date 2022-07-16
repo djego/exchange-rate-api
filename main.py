@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify
 from flask_pymongo import PyMongo
 
-max_result = 8
+max_result = 9
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 mongo = PyMongo(app)
